@@ -1,0 +1,26 @@
+version: '3.9'
+
+services:
+  wordpress:
+    image: wordpress
+    restart: always
+    links:
+      - mariadb:mysql
+    environment:
+      - WORDPRESS_DB_PASSWORD=
+      - WORDPRESS_DB_USER=root
+    ports:
+      - 8080:80
+    volumes:
+      - ./html:/var/www/html
+
+  mariadb:
+    image: mariadb
+    restart: always
+    environment:
+      - MARIADB_ALLOW_EMPTY_ROOT_PASSWORD=true
+      - MYSQL_DATABASE=wordpress
+    expose:
+      - 3306
+    volumes:
+      - ./src/requirements/mariadb/data:/var/lib/mysql
