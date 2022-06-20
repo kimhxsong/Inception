@@ -8,3 +8,4 @@ down:
 
 prune:
 	docker container prune
+	docker image prune -a
