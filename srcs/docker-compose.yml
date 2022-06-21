@@ -2,22 +2,27 @@ version: '3.9'
 
 services:
   nginx:
+    image: nginx:inception
+    restart: unless-stopped
     build:
       context: ./requirements/nginx/
       dockerfile: nginx.dockerfile
-    image: nginx:inception
     container_name: nginx
 
   mariadb:
+    image: mariadb:inception
+    restart: unless-stopped
     build:
       context: ./requirements/mariadb/
       dockerfile: mariadb.dockerfile
-    image: mariadb:inception
     container_name: mariadb
+    environment:
+      - MARIADB_DATABASE=${WORDPRESS_DB_NAME}
 
   wordpress:
+    image: wordpress:inception
+    restart: unless-stopped
     build:
       context: ./requirements/wordpress/
       dockerfile: wordpress.dockerfile
-    image: wordpress:inception
     container_name: wordpress
