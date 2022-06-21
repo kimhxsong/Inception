@@ -1,61 +1,23 @@
 version: '3.9'
 
 services:
+  nginx:
+    build:
+      context: ./requirements/nginx/
+      dockerfile: nginx.dockerfile
+    image: nginx:inception
+    container_name: nginx
+
   mariadb:
-    image: mariadb:hyeonsok
-    build: ./requirements/mariadb
+    build:
+      context: ./requirements/mariadb/
+      dockerfile: mariadb.dockerfile
+    image: mariadb:inception
     container_name: mariadb
-    restart: unless-stopped
-    env_file: .env
-    environment:
-      - MYSQL_DATABASE=wordpress
-    networks:
-      - back-tier
-    expose:
-      - 3306
-    volumes:
-      - db-data:/var/lib/mysql
 
   wordpress:
-    depends_on:
-      - mariadb:hyeonsok
-    image: wordpress:hyeonsok
-    build: ./requirements/wordpress
+    build:
+      context: ./requirements/wordpress/
+      dockerfile: wordpress.dockerfile
+    image: wordpress:inception
     container_name: wordpress
-    env_file: .env
-    environment:
-      - WORDPRESS_DB_HOST=mariadb:3306
-      - WORDPRESS_DB_USER=$MYSQL_USER
-      - WORDPRESS_DB_PASSWORD=$MYSQL_PASSWORD
-      - WORDPRESS_DB_NAME=wordpress
-
-    restart: unless-stopped
-    networks:
-      - front-tier
-      - back-tier
-    ports:
-      - 9000:80
-    volumes:
-      - www-data:/var/www/html
-
-  nginx:
-    depends_on:
-      - wordpress
-    image: nginx:hyeonsok
-    build: ./requirements/nginx
-    container_name: nginx
-    restart: unless-stopped
-    networks:
-      - front-tier
-    ports:
-      - 8080:80
-    volumes:
-      - www-data:/usr/share/nginx/html
-
-networks:
-  front-tier:
-  back-tier:
-
-volumes:
-  db-data:
-  www-data:
