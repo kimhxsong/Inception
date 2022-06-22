@@ -1,3 +1,3 @@
 #!/bin/bash
 
-php-fpm7.3 --allow-to-run-as-root --nodaemonize
+exec php-fpm7.3 --allow-to-run-as-root --nodaemonize
