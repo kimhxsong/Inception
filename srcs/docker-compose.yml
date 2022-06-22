@@ -8,6 +8,13 @@ services:
       context: ./requirements/nginx/
       dockerfile: nginx.dockerfile
     container_name: nginx
+    ports:
+     - 443:443
+     - 80:80
+    volumes:
+      - www_data:/var/www/html/
+    networks:
+      - default
 
   mariadb:
     image: mariadb:inception
@@ -16,8 +23,14 @@ services:
       context: ./requirements/mariadb/
       dockerfile: mariadb.dockerfile
     container_name: mariadb
+    expose:
+      - 3306
     environment:
       - MARIADB_DATABASE=${WORDPRESS_DB_NAME}
+    volumes:
+      - db_data:/var/lib/mysql/
+    networks:
+      - default
 
   wordpress:
     image: wordpress:inception
@@ -26,3 +39,17 @@ services:
       context: ./requirements/wordpress/
       dockerfile: wordpress.dockerfile
     container_name: wordpress
+    expose:
+      - 9000
+    env_file: ./.env
+    volumes:
+      - www_data:/var/www/html/
+    networks:
+      - default
+
+volumes:
+  db_data: {}
+  www_data: {}
+
+networks:
+  default: {}
