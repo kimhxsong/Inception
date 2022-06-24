@@ -2,6 +2,8 @@ version: '3.9'
 
 services:
   nginx:
+    depends_on:
+      - wordpress
     image: nginx:inception
     restart: unless-stopped
     build:
@@ -9,8 +11,8 @@ services:
       dockerfile: nginx.dockerfile
     container_name: nginx
     ports:
-     - 443:443
      - 80:80
+    env_file: ./.env
     volumes:
       - www_data:/var/www/html/
     networks:
@@ -33,6 +35,8 @@ services:
       - default
 
   wordpress:
+    depends_on:
+      - mariadb
     image: wordpress:inception
     restart: unless-stopped
     build:

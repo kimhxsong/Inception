@@ -27,21 +27,25 @@ RUN set -eux; \
   rm latest.tar.gz; \
   mkdir -p /var/run/php-fpm/ /var/run/php/ /var/www/html/; \
   chown -R www-data:www-data \
-    /usr/src/wordpress/ \
+    /var/www/html \
     /var/run/php-fpm/ \
     /var/run/php/ \
   ; \
   chmod 777 /var/run/php-fpm/ /var/run/php/; \
-  ln -sf /usr/src/wordpress/ /var/www/html/;
+  cp -rf /usr/src/wordpress/* /var/www/html/; \
+  chown -R www-data:www-data /var/www/html;
 
 VOLUME /var/www/html
 
-COPY --chown=www-data:www-data wp-config-docker.php /usr/src/wordpress/wp-config.php
+COPY --chown=www-data:www-data wp-config.php /var/www/html/
 COPY ./tools/docker-entrypoint.sh /usr/local/bin/
 RUN chmod +x /usr/local/bin/docker-entrypoint.sh
 
 RUN sed -i 's/\/run\/php\/php7.3-fpm.sock/0.0.0.0:9000/g' /etc/php/7.3/fpm/pool.d/www.conf
 
+RUN ln -sf /dev/stdout /var/log/php7.3-fpm.log;
+
+WORKDIR /var/www/html/
 ENTRYPOINT [ "docker-entrypoint.sh" ]
 
 EXPOSE 9000
