@@ -19,13 +19,13 @@
 # Default server configuration
 #
 server {
-        listen 80 default_server;
-        listen [::]:80 default_server;
+        # listen 80 default_server;
+        # listen [::]:80 default_server;
 
         # SSL configuration
         #
-        # listen 443 ssl default_server;
-        # listen [::]:443 ssl default_server;
+        listen 443 ssl default_server;
+        listen [::]:443 ssl default_server;
         #
         # Note: You should disable gzip for SSL traffic.
         # See: https://bugs.debian.org/773332
@@ -68,6 +68,8 @@ server {
         #location ~ /\.ht {
         #       deny all;
         #}
+        ssl_certificate /etc/nginx/self-signed/www.hyeonsok.42.fr.pem;
+        ssl_certificate_key /etc/nginx/self-signed/www.hyeonsok.42.fr-key.pem;
 }
 
 
