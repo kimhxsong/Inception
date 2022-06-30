@@ -1,11 +1,15 @@
 include ./Makefile.Inception.inc
 
+.PHONY: build
+build:
+	$(DCBUILD)
+
 .PHONY: create
 create:
 	@$(DCCREATE)
 
 .PHONY: up
-up: create
+up: build
 	@$(DCUP) -d
 
 .PHONY: down
