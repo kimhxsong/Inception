@@ -23,12 +23,11 @@ services:
     restart: unless-stopped
     build:
       context: ./requirements/mariadb/
-      dockerfile: mariadb.dockerfile
+      dockerfile: Dockerfile.mariadb
     container_name: mariadb
+    env_file: ./.env
     expose:
       - 3306
-    environment:
-      - MARIADB_DATABASE=${WORDPRESS_DB_NAME}
     volumes:
       - db_data:/var/lib/mysql/
     networks:
