@@ -8,7 +8,7 @@ services:
     restart: unless-stopped
     build:
       context: ./requirements/nginx/
-      dockerfile: nginx.dockerfile
+      dockerfile: Dockerfile.nginx
     container_name: nginx
     ports:
      - 443:443
@@ -16,7 +16,7 @@ services:
     volumes:
       - www_data:/var/www/html/
     networks:
-      - default
+      - front-tier
 
   mariadb:
     image: mariadb:inception
@@ -31,7 +31,7 @@ services:
     volumes:
       - db_data:/var/lib/mysql/
     networks:
-      - default
+      - back-tier
 
   wordpress:
     depends_on:
@@ -40,7 +40,7 @@ services:
     restart: unless-stopped
     build:
       context: ./requirements/wordpress/
-      dockerfile: wordpress.dockerfile
+      dockerfile: Dockerfile.wordpress
     container_name: wordpress
     expose:
       - 9000
@@ -48,11 +48,13 @@ services:
     volumes:
       - www_data:/var/www/html/
     networks:
-      - default
+      - front-tier
+      - back-tier
 
 volumes:
   db_data: {}
   www_data: {}
 
 networks:
-  default: {}
+  front-tier: {}
+  back-tier: {}

@@ -1,0 +1,40 @@
+FROM debian:buster
+RUN ln -sf /usr/share/zoneinfo/Asia/Seoul /etc/localtime
+
+RUN set -ex; \
+    apt-get update; \
+    apt-get install -y \
+      curl \
+      php \
+      php-fpm \
+      php-json \
+      php-mysqli \
+      mariadb-client; \
+    rm -rf /var/lib/apt/lists/*;
+
+RUN set -ex; \
+    mkdir -p /var/run/php-fpm /var/run/php /var/www/html; \
+    chown -R www-data:www-data /var/www/html /var/run/php-fpm/ /var/run/php;
+
+
+WORKDIR /var/www/html/
+
+RUN set -ex; \
+    curl -O https://raw.githubusercontent.com/wp-cli/builds/gh-pages/phar/wp-cli.phar; \
+    chmod +x wp-cli.phar; \
+    mv wp-cli.phar /usr/local/bin/wp; \
+    wp --allow-root core download --locale='ko_KR';
+ 
+COPY ./conf/php-fpm.conf /etc/php/7.3/fpm/
+COPY ./conf/www.conf /etc/php/7.3/fpm/pool.d/
+
+COPY ./tools/ /usr/local/bin/
+RUN chmod +x /usr/local/bin/*.sh
+
+VOLUME /var/www/html
+
+ENTRYPOINT [ "docker-entrypoint.sh" ]
+
+EXPOSE 9000
+# CMD ["bash"]
+CMD ["php-fpm7.3"]

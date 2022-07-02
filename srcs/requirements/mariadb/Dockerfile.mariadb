@@ -1,4 +1,5 @@
 FROM debian:buster
+RUN set -ex; ln -sf /usr/share/zoneinfo/Asia/Seoul /etc/localtime
 
 RUN groupadd -r mysql && useradd -r -g mysql mysql
 
@@ -21,13 +22,10 @@ RUN set -ex; \
 	chown -R mysql:mysql /var/lib/mysql /var/run/mysqld; \
 	chmod 777 /var/run/mysqld;
 
-COPY ./conf/ /etc/mysql/conf.d/
+COPY ./conf/50-server.cnf /etc/mysql/mariadb.conf.d
 COPY ./tools/ /usr/local/bin/
-#RUN chmod +x /usr/local/bin/entrypoint.sh
 
 VOLUME /var/lib/mysql
-
-RUN set -ex; ln -sf /usr/share/zoneinfo/Asia/Seoul /etc/localtime
 
 ENTRYPOINT [ "docker-entrypoint.sh" ]
 CMD ["mysqld"]

@@ -1,0 +1,19 @@
+FROM debian:buster
+RUN set -ex; ln -sf /usr/share/zoneinfo/Asia/Seoul /etc/localtime
+
+RUN set -ex; \
+    apt-get update; \
+    apt-get install -y nginx
+
+ADD --chown=www-data:www-data ./certs/ /etc/nginx/certs/self-signed/
+
+ADD ./sites-available/ /etc/nginx/sites-available
+RUN ln -sf /etc/nginx/sites-available/hyeonsok.42.fr /etc/nginx/sites-enabled/
+
+ADD ./tools/docker-entrypoint.sh /usr/local/bin/
+
+RUN chmod +x /usr/local/bin/docker-entrypoint.sh
+
+ENTRYPOINT [ "docker-entrypoint.sh" ]
+
+CMD ["nginx"]
