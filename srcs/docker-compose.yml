@@ -1,4 +1,4 @@
-version: '3.9'
+version: '3'
 
 services:
   nginx:
@@ -52,8 +52,18 @@ services:
       - back-tier
 
 volumes:
-  db_data: {}
-  www_data: {}
+  db_data:
+    driver: local
+    driver_opts:
+      type: none
+      o: bind
+      device: /home/hyeonsok/data/db
+  www_data:
+    driver: local
+    driver_opts:
+      type: none
+      o: bind
+      device: /home/hyeonsok/data/www
 
 networks:
   front-tier: {}
