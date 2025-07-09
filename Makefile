@@ -1,5 +1,5 @@
 DC_FILE = -f ./srcs/docker-compose.yml
-DC = docker-compose $(DC_FILE)
+DC = docker compose $(DC_FILE)
 DATA_DIR = $(shell pwd)/data
 
 DCBUILD=$(DC) build

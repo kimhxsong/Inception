@@ -34,11 +34,18 @@ sudo vi /etc/hosts
 
 Add or modify the following line:
 
+**For local development:**
 ```
 127.0.0.1   hyeonsok.42.fr
 ```
 
-- The domain (hyeonsok.42.fr) may differ depending on your docker-compose or nginx settings.
-- If you use multiple domains, add each one on a separate line.
+**For cloud deployment (AWS EC2, etc.):**
+```
+<EC2_PUBLIC_IP>   hyeonsok.42.fr
+```
+
+- Replace `<EC2_PUBLIC_IP>` with your actual EC2 instance's public IP address
+- The domain (hyeonsok.42.fr) may differ depending on your docker-compose or nginx settings
+- If you use multiple domains, add each one on a separate line
 
 ---
